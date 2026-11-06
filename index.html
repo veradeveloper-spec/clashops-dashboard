@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#10111b">
+  <title>Clash Ops — CoC Dashboard</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark">⚔</span><span>CLASH<span class="accent">OPS</span><small>CLAN COMMAND CENTER</small></span></a>
+    <div class="top-actions"><span id="updated" class="muted">Memuat data…</span><button id="installBtn" class="btn btn-outline" hidden>Pasang aplikasi</button><button id="notifyBtn" class="btn btn-outline">Aktifkan notifikasi</button></div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero panel">
+      <div>
+        <div class="eyebrow"><span class="pulse"></span> LIVE CLAN MONITOR</div>
+        <h1>Kontrol medan perang<span class="accent">.</span></h1>
+        <p>Pantau clan, status war, anggota, dan jadwal upgrade dalam satu dashboard.</p>
+        <div class="hero-meta"><span class="tag" id="clanTag">TAG: BELUM DIATUR</span><span class="tag" id="syncStatus">MENUNGGU SINKRONISASI</span></div>
+      </div>
+      <div class="hero-emblem">COC<span>OPS</span></div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat panel"><span class="stat-label">LEVEL CLAN</span><strong id="clanLevel">—</strong><small id="clanName">Nama clan</small></article>
+      <article class="stat panel"><span class="stat-label">TROPHY CLAN</span><strong id="clanPoints">—</strong><small>Clan points</small></article>
+      <article class="stat panel"><span class="stat-label">ANGGOTA</span><strong id="memberCount">—</strong><small>Member saat ini</small></article>
+      <article class="stat panel"><span class="stat-label">STATUS WAR</span><strong id="warState">—</strong><small id="warSub">Status terbaru</small></article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel section-card">
+        <div class="section-head"><div><span class="eyebrow">BATTLE STATUS</span><h2>War saat ini</h2></div><span class="live-pill">● STATUS API</span></div>
+        <div id="warPanel" class="war-panel"><div class="empty">Belum ada data war. Atur tag clan dan API key di GitHub.</div></div>
+      </article>
+      <article class="panel section-card">
+        <div class="section-head"><div><span class="eyebrow">CLAN ROSTER</span><h2>Anggota clan</h2></div><span class="counter" id="rosterCount">0 / 50</span></div>
+        <div id="members" class="members-list"><div class="empty">Data anggota akan tampil setelah sinkronisasi.</div></div>
+      </article>
+    </section>
+
+    <section class="panel section-card">
+      <div class="section-head"><div><span class="eyebrow">PERSONAL TRACKER</span><h2>Timer upgrade</h2></div><span class="tag">TERSIMPAN DI BROWSER</span></div>
+      <p class="muted">Catat upgrade bangunan atau pasukan secara manual. Timer ini tersimpan di browser perangkat ini.</p>
+      <form id="upgradeForm" class="upgrade-form">
+        <input id="upgradeName" required maxlength="48" placeholder="Nama upgrade (contoh: Archer Queen)">
+        <label class="date-field"><span>Selesai pada</span><input id="upgradeEnd" type="datetime-local" required></label>
+        <button class="btn" type="submit">+ Tambah timer</button>
+      </form>
+      <div id="upgrades" class="upgrade-list"><div class="empty">Belum ada timer upgrade.</div></div>
+    </section>
+
+
+    <section class="panel section-card">
+      <div class="section-head"><div><span class="eyebrow">MAX LEVEL PLANNER</span><h2>Estimasi upgrade sampai MAX</h2></div><span class="tag">KALKULATOR MANUAL</span></div>
+      <p class="muted">Masukkan level sekarang, level maksimal tujuan, dan rata-rata durasi satu level. Kalkulator menjumlahkan sisa waktu upgrade untuk Hero, pasukan, spell, dan bangunan.</p>
+      <form id="maxForm" class="max-form">
+        <input id="maxItemName" required maxlength="48" placeholder="Nama item (contoh: Archer Queen)">
+        <select id="maxCategory"><option value="builder">Hero / Bangunan (Builder)</option><option value="lab">Pasukan / Spell (Laboratory)</option><option value="pet">Pet House</option></select>
+        <label>Level sekarang<input id="maxCurrent" type="number" min="0" max="100" value="1" required></label>
+        <label>Level MAX tujuan<input id="maxTarget" type="number" min="1" max="100" value="10" required></label>
+        <label>Rata-rata durasi / level (hari)<input id="maxDays" type="number" min="0.01" step="0.01" value="3" required></label>
+        <button class="btn" type="submit">+ Tambahkan estimasi</button>
+      </form>
+      <div class="planner-settings">
+        <label>Builder aktif<input id="builderSlots" type="number" min="1" max="10" value="5"></label>
+        <label>Slot Laboratory<input id="labSlots" type="number" min="1" max="3" value="1"></label>
+        <label>Slot Pet House<input id="petSlots" type="number" min="1" max="3" value="1"></label>
+      </div>
+      <div id="maxSummary" class="max-summary"><div class="empty">Tambahkan item untuk melihat estimasi menuju MAX.</div></div>
+      <div id="maxItems" class="upgrade-list"></div>
+      <p class="planner-note">Catatan: estimasi ini memakai durasi rata-rata yang kamu masukkan, bukan data resmi live. Belum menghitung diskon Gold Pass/event, book, hammer, potion, season boost, upgrade yang sudah berjalan, atau syarat unlock. Perkiraan kalender per kategori = total hari kerja dibagi jumlah slot aktif.</p>
+    </section>
+
+    <footer><span>CLASHOPS // FAN-MADE DASHBOARD</span><span>Data game dari Clash of Clans API resmi · Bukan produk Supercell</span></footer>
+  </main>
+  <script src="config.js"></script>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script src="app.js"></script>
+</body>
+</html>
